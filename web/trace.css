@@ -1,0 +1,46 @@
+/* Agent-run replays (trace.js). Uses the host page's --accent, --line, --muted, --card, --mono. */
+.step.trace-step > header { background: var(--trace, #eef0ff); }
+.trace { margin: 4px 0 2px; }
+.trace-title { margin: 6px 0 10px; color: var(--muted); font-size: 0.92rem; font-weight: 600; }
+.trace-meter { position: relative; height: 6px; margin: 0 0 14px; border-radius: 3px; background: var(--line); }
+.trace-meter i { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--accent-light, var(--accent)); transition: width 0.3s ease; }
+.trace-meter[data-label]:not([data-label=""])::after {
+    content: attr(data-label); position: absolute; right: 0; top: 8px; color: var(--muted); font-size: 0.75rem;
+}
+.step .body ol.trace-steps, .trace ol.trace-steps { list-style: none; margin: 18px 0 0; padding: 0; }
+.step .body li.ts, .trace li.ts { margin: 0 0 8px; }
+.ts {
+    position: relative; padding: 8px 12px 8px 14px; border: 1px solid var(--line);
+    border-left: 4px solid var(--faint, #aaa); border-radius: 10px; background: var(--card);
+    animation: ts-in 0.25s ease;
+}
+.ts[hidden] { display: none; }
+.ts.latest { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+.ts-role { display: block; margin-bottom: 2px; color: var(--muted); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.ts-text { overflow-wrap: anywhere; line-height: 1.45; }
+.ts-ctx { position: absolute; top: 8px; right: 12px; color: var(--muted); font-size: 0.72rem; font-variant-numeric: tabular-nums; }
+.ts-branch { margin-left: 8px; padding: 1px 6px; border-radius: 6px; background: var(--line); font-weight: 600; text-transform: none; letter-spacing: 0; }
+.ts-choose { display: flex; gap: 8px; margin-top: 10px; }
+.ts-choose[hidden] { display: none; }
+.ts.role-user { border-left-color: #3b82f6; }
+.ts.role-think { border-left-color: #a78bfa; }
+.ts.role-think .ts-text { color: var(--muted); font-style: italic; }
+.ts.role-call, .ts.role-tool { border-left-color: #0ea5a4; }
+.ts.role-call .ts-text, .ts.role-tool .ts-text { font-family: var(--mono); font-size: 0.84rem; }
+.ts.role-tool { background: color-mix(in srgb, #0ea5a4 6%, var(--card)); }
+.ts.role-answer { border-left-color: var(--green, #2e9e5b); }
+.ts.role-note, .ts.role-system { border-left-color: var(--faint, #aaa); border-style: dashed; border-left-style: solid; }
+.ts.role-note .ts-text { color: var(--muted); font-size: 0.92rem; }
+.ts.role-plan { border-left-color: var(--orange, #d9791f); }
+.ts.role-approve { border-left-color: var(--red, #c9372c); }
+.ts.role-approve .ts-text { font-family: var(--mono); font-size: 0.84rem; }
+.ts.role-ask, .ts.role-human { border-left-color: #ec4899; }
+.trace-ctl { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.trace-ctl .trace-count { flex: 1; color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.trace-ctl .btn { min-height: 38px; }
+@keyframes ts-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ts { animation: none; } .trace-meter i { transition: none; } }
+@media print {
+    .trace .ts, .trace .ts[hidden] { display: block !important; break-inside: avoid; box-shadow: none; }
+    .trace-ctl, .ts-choose, .trace-meter { display: none !important; }
+}
